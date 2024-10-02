@@ -4,7 +4,6 @@ import { readFile } from "fs/promises"
 import { glob } from "fast-glob"
 
 export const DataPaths = async(): Promise<Array<DataPath>> => {
-    console.log(process.cwd() + "/data/**/*.md")
     /* @ts-ignore */
     return glob(process.cwd() + "/data/**/*.md")
 }

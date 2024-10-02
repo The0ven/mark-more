@@ -33,10 +33,9 @@ const getLinks = (paths: WebPaths) => {
             return [
                 ...prev,
                 ...currLinks.children.map((node: UnistNode) => {
-                    console.log(node)
                     return {
                         source: curr,
-                        target: paths.filter(s => s.split("/").at(-1)?.slice(0, -3) === node.value)[0]
+                        target: paths.filter(s => s.split("/").at(-1)?.slice(0, -3) === node.value)[0],
                     }
                 })
             ]
@@ -51,5 +50,6 @@ export const GenericWeb = ({paths, links}: {paths: WebPaths, links?: WebLinks}) 
     if(!links){
         links = getLinks(paths)
     }
+    console.log(paths, links)
     return <ClientWeb paths={paths.map(path2node)} links={links} />
 }
