@@ -10,7 +10,7 @@ export default async function CustomLink(props: { children?: ReactNode, classNam
     const href = await findPermaLink(props.href)
     const url = encodeURI(href.split(ROOTNAME).at(-1)!)
     return href.startsWith('/') || href === '' ? (
-        <Link href={url} className={props.className}>
+        <Link href={`/md${url}`} className={props.className}>
             {props.children}
         </Link>
     ) : (

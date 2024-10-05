@@ -51,7 +51,7 @@ const ArticleHeader = ({titlePath}: {titlePath: string}) => {
 async function Article({ file }: { file: string }){
     const body = await getBody(file)
     return(
-        <article className="prose prose-neutral dark:prose-invert prose-lg">
+        <article className="prose prose-neutral dark:prose-invert prose-lg max-w-[50%]">
             {body}
         </article>
     )
@@ -60,7 +60,7 @@ async function Article({ file }: { file: string }){
 export default async function FileRouter({ params }: { params: { path: string[] } }){
     const file = decodeURI(params.path.join('/'))
     return(
-        <div className="font-serif font-thin py-6 px-32">
+        <div className="font-serif font-thin py-6 pl-36 w-full">
             <ArticleHeader titlePath={file} />
             {
                 params.path.at(-1)!.endsWith('.md')
