@@ -1,3 +1,15 @@
 {
-  "extends": ["next/typescript"]
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "no-unused-vars": ["error", {
+      "vars": "all",
+      "args": "all",
+      "caughtErrors": "all",
+      "argsIgnorePattern": "^_"
+    }]
+  }
 }

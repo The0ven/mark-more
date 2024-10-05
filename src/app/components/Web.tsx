@@ -1,4 +1,4 @@
-import { WebLinks, WebPaths } from "@/types/web";
+import { PathNode, WebLinks, WebPaths, WebLink } from "@/types/web";
 import { DataPath } from "@/types/config"
 import { readFileSync } from "fs";
 import { Cache } from "@/data.config";
@@ -10,7 +10,7 @@ import { Node as UnistNode } from 'mdast'
 import { ClientWeb } from "./ClientWeb";
 import { path2Title } from "../utils/files";
 
-const path2node = (path: DataPath) => {
+const path2node = (path: DataPath): PathNode => {
     return {
         id: path,
         name: path2Title(path),
@@ -24,7 +24,7 @@ const getLinks = (paths: WebPaths) => {
             return c
         }
     })
-    const links: WebLinks = paths.reduce((prev: WebLinks, curr: DataPath, idx, arr) => {
+    const links: WebLinks = paths.reduce((prev: WebLinks, curr: DataPath) => {
         const data = readFileSync(curr, 'utf8')
         const tree = unified()
             .use(remarkParse, {gfm: true})
@@ -37,9 +37,9 @@ const getLinks = (paths: WebPaths) => {
                 ...currLinks.children.map((node: UnistNode) => {
                     return {
                         source: curr,
-                        target: paths.filter(s => s.split("/").at(-1)?.slice(0, -3) === node.value)[0],
+                        target: paths.filter(s => path2Title(s) === node.value)[0],
                     }
-                })
+                }).filter((link: WebLink) => (link.target && link.source && paths.includes(link.target)))
             ]
         } else {
             return [...prev]
@@ -49,6 +49,7 @@ const getLinks = (paths: WebPaths) => {
 }
 
 export const GenericWeb = ({paths, links}: {paths: WebPaths, links?: WebLinks}) => {
+    paths = paths.filter((p) => !p.includes('undefined'))
     if(!links){
         links = getLinks(paths)
     }

@@ -1,23 +1,24 @@
 "use client"
 
 import { ForceGraph2D } from "react-force-graph"
-import { WebLinks } from "@/types/web";
+import { PathNode, WebLinks } from "@/types/web";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export const ClientWeb = ({paths, links}: {paths: any[], links: WebLinks}) => {
-    const router = useRouter()
-    const addColour = () => {
+const addColour = (links: WebLinks) => {
         return links.map((link) => Object.assign(link, {color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ededed' : '#171717'}))
     }
-    const [graphLinks, setGraphLinks] = useState(addColour())
+
+export const ClientWeb = ({paths, links}: {paths: PathNode[], links: WebLinks}) => {
+    const router = useRouter()
+    const [graphLinks, setGraphLinks] = useState(addColour(links))
     useEffect(() => {
         if(window?.matchMedia){
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (_) => {
-                setGraphLinks(addColour)
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (_event) => {
+                setGraphLinks(() => addColour(links))
             })
         }
-    }, [])
+    }, [links])
     if(paths.length > 0 && links.length > 0){
         return (
             <ForceGraph2D
@@ -26,7 +27,7 @@ export const ClientWeb = ({paths, links}: {paths: any[], links: WebLinks}) => {
                     links: graphLinks
                 }}
                 height={Math.floor(screen.availHeight*0.5)}
-                onNodeClick={(node, event) => {
+                onNodeClick={(node, _event) => {
                     router.push(`/md/${node.id.split('/').at(-1)}`)
                 }}
             />

@@ -3,7 +3,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { relative2Absolute } from "../utils/files"
 
 export const HomeButton = (props: {className: string}) => {
     const [imageSrc, setImageSrc] = useState("/closed.png")
@@ -39,7 +38,7 @@ export const BreadCrumbs = (props: { path: string, className: string }) => {
     const crumbs = props.path.split('/').slice(0, -1)
     return (
         <div className={props.className}>
-            {crumbs.map((crumb, idx) => <BreadCrumb crumb={crumb} path={`/md/${crumbs.slice(0, idx+1).join('/')}`} />)}
+            {crumbs.map((crumb, idx) => <BreadCrumb crumb={crumb} path={`/md/${crumbs.slice(0, idx+1).join('/')}`} key={`${crumb}_${idx}`} />)}
         </div>
     )
 }
