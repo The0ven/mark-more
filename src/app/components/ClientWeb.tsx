@@ -3,8 +3,10 @@
 import { ForceGraph2D } from "react-force-graph"
 import { WebLinks } from "@/types/web";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const ClientWeb = ({paths, links}: {paths: any[], links: WebLinks}) => {
+    const router = useRouter()
     const addColour = () => {
         return links.map((link) => Object.assign(link, {color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ededed' : '#171717'}))
     }
@@ -24,6 +26,9 @@ export const ClientWeb = ({paths, links}: {paths: any[], links: WebLinks}) => {
                     links: graphLinks
                 }}
                 height={Math.floor(screen.availHeight*0.5)}
+                onNodeClick={(node, event) => {
+                    router.push(`/md/${node.id.split('/').at(-1)}`)
+                }}
             />
         )
     }

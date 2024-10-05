@@ -8,11 +8,13 @@ import wikiLinkPlugin from "remark-wiki-link";
 import flatFilter from 'unist-util-flat-filter';
 import { Node as UnistNode } from 'mdast'
 import { ClientWeb } from "./ClientWeb";
+import { path2Title } from "../utils/files";
 
 const path2node = (path: DataPath) => {
     return {
         id: path,
-        name: path.split("/").at(-1)?.slice(0, -3)!,
+        name: path2Title(path),
+        color: "#A57F60"
     }
 }
 
@@ -50,6 +52,5 @@ export const GenericWeb = ({paths, links}: {paths: WebPaths, links?: WebLinks}) 
     if(!links){
         links = getLinks(paths)
     }
-    console.log(paths, links)
     return <ClientWeb paths={paths.map(path2node)} links={links} />
 }

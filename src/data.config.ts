@@ -2,10 +2,11 @@ import { DataPath } from "@/types/config"
 import { WebLinks } from "@/types/web"
 import { readFile } from "fs/promises"
 import { glob } from "fast-glob"
+import { ROOTNAME } from "./data.config.client"
 
-export const DataPaths = async(): Promise<Array<DataPath>> => {
+export const DataPaths = async(path?: string): Promise<Array<DataPath>> => {
     /* @ts-ignore */
-    return glob(process.cwd() + "/data/**/*.md")
+    return glob(process.cwd() + `/${ROOTNAME}${path ? path : ''}/**/*.md`)
 }
 export const Title: string = "Mark-More"
 export const Cache = async(): Promise<WebLinks|null> => {
