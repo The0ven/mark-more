@@ -1,10 +1,8 @@
 import { BreadCrumbs, HomeButton } from "@/app/components/Header";
 import CustomLink from "@/app/components/Links";
 import { HomeLinks } from "@/app/page";
-import { findPermaLink, path2Title, relative2Absolute } from "@/app/utils/files";
-import { DataPaths } from "@/data.config";
-import { readFile } from "fs/promises";
-import Link from "next/link";
+import { path2Title, relative2Absolute } from "@/app/utils/files";
+import { BACKENDHOST, DataPaths } from "@/data.config";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import rehypeReact from "rehype-react";
 import remarkParse from "remark-parse";
@@ -13,7 +11,9 @@ import wikiLinkPlugin from "remark-wiki-link";
 import { unified } from "unified";
 
 const getBody = async(fileName: string) => {
-    const data = await readFile(relative2Absolute(fileName), 'utf8')
+    console.log("starting getBody")
+    const time = Date.now()
+    const data = await (await fetch(`${BACKENDHOST}/read/${relative2Absolute(fileName)}`)).text()
     const body = await unified()
         .use(remarkParse, {gfm: true})
         .use(wikiLinkPlugin, {
@@ -35,6 +35,7 @@ const getBody = async(fileName: string) => {
             }
         })
         .process(data)
+    console.log(`getting body took ${(Date.now() - time)}ms`)
     return body.result
 }
 

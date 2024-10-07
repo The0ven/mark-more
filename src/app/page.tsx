@@ -6,7 +6,7 @@ import { ROOTNAME } from "@/data.config.client";
 import { path2Title } from "./utils/files";
 
 const HomeLink = ({path}: {path: DataPath}) => {
-    const url = encodeURI(path.split(ROOTNAME).at(-1)!)
+    const url = path.split(ROOTNAME).at(-1)!
     return (
         <Link href={`/md/${url}`.replaceAll('//','/')} className={`text-2xl font-serif font-thin tracking-tight ${!url && "text-red-200"}`}>
             {path2Title(path)}
