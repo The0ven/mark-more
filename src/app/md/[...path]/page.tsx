@@ -99,7 +99,7 @@ async function Article({ file }: { file: string }){
                 type: "spring",
                 bounce: 0.2
             }}
-            className="prose prose-neutral dark:prose-invert prose-lg max-w-[50%]"
+            className="prose prose-neutral dark:prose-invert prose-lg lg:max-w-[50%]"
         >
             {body}
         </motion.article>
