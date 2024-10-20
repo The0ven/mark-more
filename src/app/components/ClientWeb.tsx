@@ -10,7 +10,7 @@ const addColour = (links: WebLinks) => {
         return links.map((link) => Object.assign(link, {color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#ededed66' : '#17171766'}))
     }
 
-export const ClientWeb = ({paths, links}: {paths: PathNode[], links: WebLinks}) => {
+const ClientWeb = ({paths, links}: {paths: PathNode[], links: WebLinks}) => {
     const router = useRouter()
     const [isVisible, setIsVisible] = useState(true)
     const [graphLinks, setGraphLinks] = useState(addColour(links))
@@ -73,3 +73,5 @@ export const ClientWeb = ({paths, links}: {paths: PathNode[], links: WebLinks}) 
         }
     }
 }
+
+export default ClientWeb

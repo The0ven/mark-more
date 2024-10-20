@@ -4,11 +4,10 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import wikiLinkPlugin from "remark-wiki-link";
 import flatFilter from 'unist-util-flat-filter';
-import { Node as UnistNode } from 'mdast'
-import { ClientWeb } from "./ClientWeb";
 import { path2Title } from "../utils/files";
 import { GetCache, PutCache } from "../utils/cache";
 import { BACKENDHOST } from "@/data.config";
+import dynamic from "next/dynamic";
 
 const path2node = (path: DataPath, links: WebLinks): PathNode => {
     return {
@@ -32,8 +31,10 @@ const handleTree = (data: string, curr: DataPath, paths: WebPaths) => {
         .use(wikiLinkPlugin, {aliasDivider: '|'})
         .parse(data)
     const currLinks = flatFilter(tree, node => node.type === "wikiLink")
+    // @ts-ignore
     if(currLinks && currLinks.children.length > 0){
-        return currLinks.children.map((node: UnistNode) => {
+        // @ts-ignore
+        return currLinks.children.map((node: Literal) => {
             return {
                 source: curr,
                 target: paths.filter(s => path2Title(s) === node.value)[0],
@@ -60,6 +61,11 @@ const getLinks = async (paths: WebPaths) => {
     await PutCache(links)
     return links
 }
+
+const ClientWeb = dynamic(
+    () => import('./ClientWeb'),
+    { ssr: false }
+)
 
 export const GenericWeb = async({paths, links}: {paths: WebPaths, links?: WebLinks}) => {
     paths = paths.filter((p) => !p.includes('undefined'))

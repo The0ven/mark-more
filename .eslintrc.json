@@ -9,7 +9,10 @@
       "vars": "all",
       "args": "all",
       "caughtErrors": "all",
-      "argsIgnorePattern": "^_"
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "caughtErrorsIgnorePattern": "^_",
+      "destructuredArrayIgnorePattern": "^_"
     }]
   }
 }

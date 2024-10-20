@@ -1,6 +1,5 @@
 import { BreadCrumbs, HomeButton } from "@/app/components/Header";
-import CustomLink from "@/app/components/Links";
-import { HomeLinks } from "@/app/page";
+import CustomLink, { HomeLinks } from "@/app/components/Links";
 import { path2Title, relative2Absolute } from "@/app/utils/files";
 import { BACKENDHOST, DataPaths } from "@/data.config";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
@@ -10,6 +9,7 @@ import remarkRehype from "remark-rehype";
 import wikiLinkPlugin from "remark-wiki-link";
 import { unified } from "unified";
 import * as motion from "framer-motion/client"
+import { Suspense } from "react";
 
 const getBody = async(fileName: string) => {
     console.log("starting getBody")
@@ -87,20 +87,48 @@ const ArticleHeader = ({titlePath}: {titlePath: string}) => {
 async function Article({ file }: { file: string }){
     const body = await getBody(file)
     return(
-        <article className="prose prose-neutral dark:prose-invert prose-lg max-w-[50%]">
+        <motion.article
+            initial={{
+                y: 100
+            }}
+            animate={{
+                y: 0
+            }}
+            transition={{
+                duration: 0.8,
+                type: "spring",
+                bounce: 0.2
+            }}
+            className="prose prose-neutral dark:prose-invert prose-lg max-w-[50%]"
+        >
             {body}
-        </article>
+        </motion.article>
     )
 }
 
-export default async function FileRouter({ params }: { params: { path: string[] } }){
+const TextLoad = () => {
+    return(
+        <div className="mt-4 animate-pulse flex flex-col gap-y-3">
+            <div className="w-1/4 bg-stone-700 h-5 rounded-xl"/>
+            <div className="w-1/6 bg-stone-700 h-5 rounded-xl"/>
+            <div className="w-1/5 bg-stone-700 h-5 rounded-xl"/>
+            <div className="w-1/6 bg-stone-700 h-5 rounded-xl"/>
+            <div className="w-1/6 bg-stone-700 h-5 rounded-xl"/>
+            <div className="w-1/5 bg-stone-700 h-5 rounded-xl"/>
+        </div>
+    )
+}
+
+export default function FileRouter({ params }: { params: { path: string[] } }){
     const file = decodeURI(params.path.join('/'))
     return(
         <div className="font-serif font-thin py-6 pl-36 w-full">
             <ArticleHeader titlePath={file} />
             {
                 params.path.at(-1)!.endsWith('.md')
-                    ? <Article file={file} />
+                    ? <Suspense fallback={<TextLoad /> }>
+                        <Article file={file} />
+                    </Suspense>
                     : <HomeLinks path={`/${params.path.join('/')}/`}/>
             }
         </div>

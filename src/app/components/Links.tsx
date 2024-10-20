@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ReactNode } from "react";
-import { findPermaLink } from "../utils/files";
+import { findPermaLink, path2Title } from "../utils/files";
 import { ROOTNAME } from "@/data.config.client";
+import { DataPaths } from "@/data.config";
+import { DataPath } from "@/types/config";
 
 export default async function CustomLink(props: { children?: ReactNode, className?: string, href?: string }) {
     if(!props.href){
@@ -23,4 +25,22 @@ export default async function CustomLink(props: { children?: ReactNode, classNam
             {props.children}
         </a>
     );
+}
+
+const HomeLink = ({path}: {path: DataPath}) => {
+    const url = path.split(ROOTNAME).at(-1)!
+    return (
+        <Link href={`/md/${url}`.replaceAll('//','/')} className={`text-2xl font-serif font-thin tracking-tight ${!url && "text-red-200"}`}>
+            {path2Title(path)}
+        </Link>
+    )
+}
+
+export async function HomeLinks({ path }: { path?: string }){
+    const paths = await DataPaths(path)
+    return (
+        <div className="size-full border-t pt-6 px-24 flex flex-col">
+            {paths.map((path) => <HomeLink path={path} key={path} />)}
+        </div>
+    )
 }
