@@ -122,7 +122,7 @@ const TextLoad = () => {
 export default function FileRouter({ params }: { params: { path: string[] } }){
     const file = decodeURI(params.path.join('/'))
     return(
-        <div className="font-serif font-thin py-6 pl-36 w-full">
+        <div className="font-serif font-thin py-6 pl-3 lg:pl-36 w-full">
             <ArticleHeader titlePath={file} />
             {
                 params.path.at(-1)!.endsWith('.md')

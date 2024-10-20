@@ -39,7 +39,7 @@ const HomeLink = ({path}: {path: DataPath}) => {
 export async function HomeLinks({ path }: { path?: string }){
     const paths = await DataPaths(path)
     return (
-        <div className="size-full border-t pt-6 px-24 flex flex-col">
+        <div className="size-full border-t pt-6 px-3 lg:px-24 flex flex-col">
             {paths.map((path) => <HomeLink path={path} key={path} />)}
         </div>
     )
