@@ -9,6 +9,7 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import wikiLinkPlugin from "remark-wiki-link";
 import { unified } from "unified";
+import * as motion from "framer-motion/client"
 
 const getBody = async(fileName: string) => {
     console.log("starting getBody")
@@ -40,12 +41,46 @@ const getBody = async(fileName: string) => {
 }
 
 const ArticleHeader = ({titlePath}: {titlePath: string}) => {
+    const list = {
+        visible: { 
+            transition: {
+                layout: {duration: 0.2, ease: "linear"},
+                when: "beforeChildren",
+                staggerChildren: 0.2,
+                staggerDirection: -1
+            } 
+        },
+        hidden: { 
+            transition: {
+                when: "afterChildren",
+            }
+        }
+    }
+    const item = {
+        visible: { opacity: 1 },
+        hidden: { opacity: 0 },
+    }
+    const title = {
+        visible: { opacity: 1 },
+        hidden: { opacity: 1 }
+    }
     return(
-        <div className="group flex items-center gap-x-3">
-            <HomeButton className="hidden group-hover:block opacity-80"/>
-            <BreadCrumbs path={titlePath} className="hidden group-hover:block" />
-            <h1 className="text-5xl">{path2Title(titlePath)}</h1>
-        </div>
+        <motion.div
+            initial="hidden"
+            whileHover="visible"
+            layout
+            layoutRoot
+            variants={list}
+            className="group flex items-center gap-x-3"
+        >
+            <motion.div variants={item} className="hidden group-hover:block">
+                <HomeButton className="hidden group-hover:block opacity-80"/>
+            </motion.div>
+            <motion.div variants={item} className="hidden group-hover:block">
+                <BreadCrumbs path={titlePath} className="hidden group-hover:block" />
+            </motion.div>
+            <motion.h1 layout className="text-5xl" variants={title}>{path2Title(titlePath)}</motion.h1>
+        </motion.div>
     )
 }
 

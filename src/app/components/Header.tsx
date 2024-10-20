@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import { motion } from "framer-motion"
 
 export const HomeButton = (props: {className: string}) => {
     const [imageSrc, setImageSrc] = useState("/closed.png")
@@ -37,8 +38,10 @@ const BreadCrumb = (props: { crumb: string, path: string }) => {
 export const BreadCrumbs = (props: { path: string, className: string }) => {
     const crumbs = props.path.split('/').slice(0, -1)
     return (
-        <div className={props.className}>
+        <motion.div
+            className={props.className}
+        >
             {crumbs.map((crumb, idx) => <BreadCrumb crumb={crumb} path={`/md/${crumbs.slice(0, idx+1).join('/')}`} key={`${crumb}_${idx}`} />)}
-        </div>
+        </motion.div>
     )
 }

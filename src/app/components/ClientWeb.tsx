@@ -2,7 +2,7 @@
 
 import { ForceGraph2D } from "react-force-graph"
 import { PathNode, WebLinks } from "@/types/web";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROOTNAME } from "@/data.config.client";
 
@@ -22,15 +22,14 @@ export const ClientWeb = ({paths, links}: {paths: PathNode[], links: WebLinks}) 
         }
     }, [links])
 
-    const handleScroll = useCallback((_event: Event) => {
-        if(window){
-            const { scrollY } = window;
-            console.log(scrollY)
-            setIsVisible(scrollY <= screen.availHeight*0.5)
-        }
-    },[]);
-
     useEffect(() => {
+        const handleScroll = (_event: Event) => {
+            if(window){
+                const { scrollY } = window;
+                console.log(scrollY)
+                setIsVisible(scrollY <= screen.availHeight*0.5)
+            }
+        }
 
         document.addEventListener('scroll', handleScroll);
 
@@ -54,19 +53,22 @@ export const ClientWeb = ({paths, links}: {paths: PathNode[], links: WebLinks}) 
             )
         } else {
             return (
-                <div className="fixed top-3 right-3">
-                    <ForceGraph2D
-                        graphData={{
-                            nodes: paths,
-                            links: graphLinks
-                        }}
-                        height={Math.floor(screen.availHeight*0.4)}
-                        width={Math.floor(screen.availWidth*0.4)}
-                        onNodeClick={(node, _event) => {
-                            router.push(`/md/${node.id.split(ROOTNAME).at(-1)!}`)
-                        }}
-                    />
-                </div>
+                <>
+                    <div style={{height: Math.floor(screen.availHeight*0.5)}} />
+                    <div className="fixed top-3 right-3">
+                        <ForceGraph2D
+                            graphData={{
+                                nodes: paths,
+                                links: graphLinks
+                            }}
+                            height={Math.floor(screen.availHeight*0.4)}
+                            width={Math.floor(screen.availWidth*0.4)}
+                            onNodeClick={(node, _event) => {
+                                router.push(`/md/${node.id.split(ROOTNAME).at(-1)!}`)
+                            }}
+                        />
+                    </div>
+                </>
             )
         }
     }
